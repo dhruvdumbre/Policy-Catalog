@@ -1,0 +1,319 @@
+
+:root {
+    font-family: "Segoe UI", Arial, sans-serif;
+    color: #17233b;
+    background: #f5f7fb;
+    font-synthesis: none;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+}
+
+.sidebar {
+    position: fixed;
+    inset: 0 auto 0 0;
+    width: 245px;
+    padding: 30px 20px;
+    background: #15243d;
+    color: white;
+}
+
+.brand {
+    font-size: 23px;
+    font-weight: 750;
+    margin-bottom: 46px;
+}
+
+.brand span {
+    color: #80aaff;
+}
+
+.sidebar-label, .eyebrow {
+    color: #7d8da8;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.3px;
+}
+
+.nav-link {
+    display: block;
+    color: #c2cee0;
+    padding: 13px;
+    margin: 8px 0;
+    border-radius: 8px;
+    text-decoration: none;
+}
+
+.nav-link:hover, .nav-link.active {
+    background: #293c5d;
+    color: white;
+}
+
+.sidebar-footer {
+    position: absolute;
+    bottom: 28px;
+    color: #a5b3c8;
+    font-size: 12px;
+    line-height: 1.8;
+}
+
+.main-content {
+    margin-left: 245px;
+    padding: 34px;
+}
+
+.topbar, .panel-heading, .toolbar, .dialog-heading,
+.dialog-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+h1 {
+    margin: 8px 0;
+    font-size: 30px;
+}
+
+.subtitle, .panel-heading p {
+    color: #718096;
+    margin: 5px 0;
+}
+
+.primary-btn, .secondary-btn {
+    border: 0;
+    border-radius: 8px;
+    padding: 11px 16px;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.primary-btn {
+    background: #315fe8;
+    color: white;
+}
+
+.primary-btn:hover {
+    background: #244dcc;
+}
+
+.secondary-btn {
+    background: #edf1f8;
+    color: #243650;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+    margin: 30px 0;
+}
+
+.stat-card, .panel {
+    background: white;
+    border: 1px solid #e7ebf2;
+    border-radius: 12px;
+}
+
+.stat-card {
+    padding: 22px;
+}
+
+.stat-card p, .stat-card span {
+    color: #718096;
+    font-size: 13px;
+}
+
+.stat-card h2 {
+    font-size: 28px;
+    margin: 12px 0;
+}
+
+.panel {
+    padding: 24px;
+}
+
+.panel-heading {
+    margin-bottom: 22px;
+}
+
+.panel-heading h2 {
+    margin: 0;
+}
+
+.toolbar {
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    margin-bottom: 18px;
+}
+
+input, select {
+    min-width: 0;
+    padding: 11px 12px;
+    border: 1px solid #d9e0eb;
+    border-radius: 7px;
+    background: white;
+    color: #17233b;
+    font: inherit;
+}
+
+#searchInput {
+    flex: 1;
+    min-width: 210px;
+}
+
+.table-wrapper {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    white-space: nowrap;
+}
+
+th, td {
+    padding: 15px 12px;
+    text-align: left;
+    border-bottom: 1px solid #edf0f5;
+    font-size: 13px;
+}
+
+th {
+    color: #6b7a90;
+    background: #f8f9fc;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+}
+
+.badge {
+    display: inline-block;
+    padding: 5px 9px;
+    border-radius: 20px;
+    background: #eaf0ff;
+    color: #3155b7;
+    font-size: 12px;
+}
+
+.action-btn {
+    border: 0;
+    background: transparent;
+    padding: 6px;
+    cursor: pointer;
+    font: inherit;
+    color: #315fe8;
+}
+
+.action-btn.delete {
+    color: #c33d4b;
+}
+
+#statusMessage {
+    margin: 12px 0;
+    color: #43536b;
+    font-size: 14px;
+}
+
+dialog {
+    width: min(520px, calc(100% - 30px));
+    border: 1px solid #e1e6ef;
+    border-radius: 14px;
+    padding: 26px;
+}
+
+dialog::backdrop {
+    background: rgb(13 24 43 / 50%);
+}
+
+dialog label {
+    display: block;
+    margin: 15px 0 7px;
+    font-size: 13px;
+    font-weight: 650;
+}
+
+dialog input, dialog select {
+    width: 100%;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+}
+
+.close-btn {
+    border: 0;
+    background: transparent;
+    font-size: 28px;
+    cursor: pointer;
+}
+
+.dialog-actions {
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.error-message {
+    color: #b42332;
+    font-size: 13px;
+}
+
+footer {
+    color: #8490a3;
+    text-align: center;
+    margin-top: 30px;
+    font-size: 12px;
+}
+
+@media (max-width: 900px) {
+    .sidebar {
+        position: static;
+        width: 100%;
+        padding: 18px;
+    }
+
+    .brand {
+        margin-bottom: 15px;
+    }
+
+    .sidebar-label, .sidebar-footer {
+        display: none;
+    }
+
+    .nav-link {
+        display: inline-block;
+    }
+
+    .main-content {
+        margin-left: 0;
+        padding: 20px;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 550px) {
+    .topbar {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .panel {
+        padding: 14px;
+    }
+}
+
