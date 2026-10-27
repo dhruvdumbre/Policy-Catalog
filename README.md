@@ -1,177 +1,250 @@
 # Policy Catalog
 
-A standalone command-line application for managing insurance policy
-types using Python and SQLite. It supports creating, viewing, filtering,
-updating, and deleting policy records.
+A web-based insurance policy management application built with **Python, Flask, SQLite, HTML, CSS, and JavaScript**. The application provides policy CRUD operations, an analytics dashboard, CSV-based data ingestion, and automated data quality auditing.
 
 ## Features
 
--   Create policy types with an automatically generated Policy ID.
--   View all saved policies.
--   Filter policies by category.
--   Update policy details using the Policy ID.
--   Delete policies by ID after confirmation.
--   Store records persistently in SQLite.
--   Validate policy names, categories, premium ranges, and coverage
-    amounts.
--   Insert fictional sample records during startup without duplicating
-    existing sample records.
+### 1. Policy Management (CRUD)
+- **Create:** Add new insurance policy types.
+- **Read:** View all policies and browse policy details.
+- **Update:** Modify existing policy information.
+- **Delete:** Remove policies from the catalog.
+- **Validation:** Validate policy names, categories, premiums, and coverage amounts.
+- **Persistent storage:** Store policy records in an SQLite database.
+
+### 2. Analytics Dashboard
+- View the total number of policies and categories.
+- Analyze minimum and maximum premium statistics.
+- Explore policy distribution and coverage metrics.
+- Visualize policy data using interactive charts.
+
+### 3. CSV Import & ETL Pipeline
+- Upload policy data through a CSV file.
+- Validate the file structure and required columns.
+- Transform and normalize imported values.
+- Detect duplicate records within the uploaded file and against existing records.
+- Preview valid and invalid records before importing.
+- Import valid records into the SQLite database.
+
+### 4. Data Quality Engine
+- Audit policy records for data quality issues.
+- Detect missing policy names and categories.
+- Identify invalid categories and numeric values.
+- Check premium ranges and coverage constraints.
+- Identify duplicate policy name/category combinations.
+- Calculate a data quality score and summarize affected records.
+- Export audit findings as a CSV report.
+
+The data quality audit is designed to report issues without modifying existing records.
 
 ## Technology Stack
 
--   **Language:** Python 3
--   **Database:** SQLite (`sqlite3`, included with Python)
--   **Interface:** Command-line menu
-
-No external database server is required.
+| Technology | Purpose |
+|---|---|
+| Python | Application logic and data processing |
+| Flask | Web application and REST API |
+| SQLite | Relational database |
+| HTML5 | Page structure |
+| CSS3 | Styling and responsive layouts |
+| JavaScript | Frontend interactions and API communication |
+| Plotly.js | Interactive data visualizations |
+| Pandas | Data analysis |
+| Python `csv` module | CSV processing and report generation |
 
 ## Project Structure
 
-``` text
+```text
 policy_catalog/
-├── main.py          # Command-line menu and application flows
-├── database.py      # SQLite connection and database operations
-├── policy_catalog.db  # SQLite database; created automatically
-└── README.md        # Project documentation
+├── app.py                    # Flask application and API routes
+├── main.py                   # Command-line application
+├── database.py               # SQLite database operations
+├── analytics.py              # Analytics calculations
+├── etl.py                    # CSV import and ETL processing
+├── data_quality.py           # Data quality auditing
+├── templates/
+│   ├── dashboard.html        # Main dashboard
+│   ├── index.html            # Policy listing and management
+│   ├── analytics.html        # Analytics dashboard
+│   ├── import.html           # CSV import interface
+│   └── quality.html          # Data quality report
+├── static/
+│   ├── css/
+│   │   └── style.css         # Application styling
+│   └── js/
+│       ├── dashboard.js      # Dashboard functionality
+│       ├── script.js         # Policy management interactions
+│       ├── analytics.js      # Analytics functionality
+│       ├── import.js         # CSV import interactions
+│       └── quality.js        # Data quality interface
+├── policy_catalog.db         # Local database, generated at runtime
+├── requirements.txt          # Python dependencies, if maintained
+└── README.md                 # Project documentation
 ```
 
-The database file is generated automatically when the application
-initializes. Do not commit real customer, policyholder, claims, KYC, or
-payment data.
+*The structure above describes the expected project layout. Keep only the files that actually exist in your repository.*
 
-## Requirements
+## Prerequisites
 
--   Python 3 installed
--   A terminal or command prompt
+- Python 3
+- pip
+- A web browser
+- Git (optional, for version control)
 
-Check your Python installation:
+## Installation
 
-``` powershell
-python --version
+### 1. Clone the repository
+
+```powershell
+git clone https://github.com/dhruvdumbre/Policy-Catalog.git
+cd Policy-Catalog
 ```
 
-## How to Run
+### 2. Create a virtual environment
 
-1.  Open a terminal in the project directory.
+```powershell
+python -m venv .venv
+```
 
-2.  Run the application:
+Activate it in Windows PowerShell:
 
-    ``` powershell
-    python main.py
-    ```
+```powershell
+.\.venv\Scripts\Activate.ps1
+```
 
-3.  Use the displayed menu to select an operation.
+### 3. Install dependencies
 
-The application initializes the SQLite database when it starts. If the
-sample-data seeding function is enabled in `main.py`, it checks and
-inserts the sample records without duplicating matching name/category
-pairs.
+If the project has a `requirements.txt` file:
 
-## Menu Options
+```powershell
+pip install -r requirements.txt
+```
 
-  -----------------------------------------------------------------------
-  Option                  Operation               Description
-  ----------------------- ----------------------- -----------------------
-  1                       Create Policy           Add a policy with its
-                                                  name, category, minimum
-                                                  premium, maximum
-                                                  premium, and coverage
-                                                  amount.
+Otherwise, install the packages required by the application. For the current Flask and Pandas implementation, this will typically include:
 
-  2                       View Policies           View all policies or
-                                                  filter by category.
+```powershell
+pip install Flask pandas
+```
 
-  3                       Update Policy           Update a policy by its
-                                                  ID.
+Plotly.js is loaded through a CDN in the analytics page, so a separate Python Plotly package is not required for that frontend charting setup.
 
-  4                       Delete Policy           Review a policy and
-                                                  confirm before deleting
-                                                  it.
+## Running the Application
 
-  5                       Exit                    Close the application.
-  -----------------------------------------------------------------------
+Start the Flask application from the project directory:
 
-## Policy Fields
+```powershell
+python app.py
+```
 
-  Field               Description
-  ------------------- -------------------------------------------
-  `policy_type_id`    Automatically generated unique identifier
-  `name`              Policy name
-  `category`          Insurance category
-  `min_premium`       Minimum premium amount
-  `max_premium`       Maximum premium amount
-  `coverage_amount`   Coverage amount offered by the policy
+Open the local application in your browser:
+
+**http://127.0.0.1:5000**
+
+The database is initialized by the application according to its database initialization logic.
+
+To run the original command-line interface, if required:
+
+```powershell
+python main.py
+```
+
+## Application Pages
+
+| Page | Route | Purpose |
+|---|---|---|
+| Dashboard | `/` | Overview and quick actions |
+| All Policies | `/policies` | Browse and manage policy records |
+| Analytics | `/analytics` | View policy statistics and charts |
+| CSV Import | `/import` | Upload, preview, and import CSV data |
+| Data Quality | `/quality` | Audit records and export quality findings |
+
+## Policy Data Fields
+
+| Field | Description |
+|---|---|
+| `policy_type_id` | Automatically generated policy identifier |
+| `name` | Name of the insurance policy type |
+| `category` | Insurance category |
+| `min_premium` | Minimum premium amount |
+| `max_premium` | Maximum premium amount |
+| `coverage_amount` | Coverage amount offered by the policy |
 
 ## Validation Rules
 
--   Policy name cannot be empty.
--   Policy name must be unique within its category.
--   Category must be one of: `Motor`, `Health`, `Life`, `Travel`,
-    `Home`, or `Other`.
--   Minimum and maximum premiums must be positive numbers.
--   Minimum premium must be less than maximum premium.
--   Coverage amount must be positive and at least equal to the maximum
-    premium.
--   Invalid or nonexistent policy IDs should produce a clear message
-    rather than crash the application.
--   Deletion requires confirmation.
+- Policy names must not be empty.
+- A policy name must be unique within its category.
+- Categories must belong to the configured list: `Motor`, `Health`, `Life`, `Travel`, `Home`, or `Other`.
+- Premium amounts must be positive numbers.
+- The minimum premium must be lower than the maximum premium.
+- Coverage must be positive.
+- The current validation logic checks that coverage is at least the maximum premium.
 
-### Category Update Decision
+## CSV Import Format
 
-Changing a policy's category after creation is allowed. The new category
-must be in the approved list, and the resulting policy name/category
-combination must remain unique.
+The CSV file must contain these column names:
 
-## Sample Data
+```csv
+name,category,min_premium,max_premium,coverage_amount
+Family Health Plus,Health,5000,15000,500000
+Secure Life Plan,Life,3000,12000,1000000
+Vehicle Protect,Motor,2500,8000,300000
+```
 
-The application can seed fictional sample policies across the allowed
-categories, such as Motor Comprehensive, Family Health Insurance, Term
-Life Secure, Travel Protect Plus, Home Shield, and Personal Accident
-Cover.
+Follow the import page's validation results before committing records. Use fictional test data rather than real customer or policyholder information.
 
-Only fictional test data should be used.
+## API Endpoints
 
-## Database and Persistence
+The application exposes REST-style endpoints for its web interface.
 
-The application uses SQLite and stores data in `policy_catalog.db` in
-the project directory. Records remain saved after the application closes
-and restarts. Policy IDs may have gaps after records are deleted; IDs
-are not intended to be consecutive.
+| Endpoint | Method | Purpose |
+|---|---|---|
+| `/api/policies` | GET | Retrieve policy records |
+| `/api/analytics` | GET | Retrieve analytics data |
+| `/api/import/preview` | POST | Validate and preview a CSV upload |
+| `/api/import/commit` | POST | Import approved records |
+| `/api/quality` | GET | Retrieve the data quality audit |
+| `/api/quality/report.csv` | GET | Download quality findings as CSV |
 
-## Manual Test Checklist
+The policy CRUD API may include additional routes for creating, updating, and deleting records; refer to `app.py` for the exact methods and endpoint paths.
 
--   [ ] Create a valid policy and confirm that an ID is generated.
--   [ ] View all policies.
--   [ ] Filter by a category and confirm only matching policies appear.
--   [ ] Filter a category with no records and confirm a "No policies
-    found" message appears.
--   [ ] Reject an empty policy name.
--   [ ] Reject a category outside the allowed list.
--   [ ] Reject non-positive premiums, a minimum premium greater than or
-    equal to the maximum, and non-positive coverage.
--   [ ] Reject a duplicate name in the same category.
--   [ ] Update a policy and confirm the stored values change.
--   [ ] Try updating or deleting a nonexistent ID.
--   [ ] Delete an existing policy with confirmation and verify it
-    remains deleted after restarting.
--   [ ] Restart the application and verify records persist and sample
-    data is not duplicated.
+## Testing Checklist
 
-## Git Workflow
+- [ ] Create a policy with valid data.
+- [ ] View the policy list and confirm the new record appears.
+- [ ] Update a policy and verify the changes.
+- [ ] Delete a policy and verify its removal.
+- [ ] Confirm invalid inputs are rejected.
+- [ ] Confirm analytics reflect the current database records.
+- [ ] Upload a valid CSV and inspect its preview.
+- [ ] Test missing columns, invalid numeric values, and duplicate records.
+- [ ] Import valid rows and confirm they are saved.
+- [ ] Run the data quality audit.
+- [ ] Download and inspect the quality report.
+- [ ] Restart the application and verify database persistence.
 
-Commit the work in meaningful stages, for example:
+## Data and Security Notes
 
-1.  Set up SQLite database and schema.
-2.  Implement policy creation and validation.
-3.  Implement listing and category filtering.
-4.  Implement policy updates.
-5.  Implement deletion with confirmation.
-6.  Add sample data and documentation.
+- The SQLite database is local application data and should generally not be committed to Git.
+- Do not commit passwords, API keys, `.env` files, or real customer information.
+- Use fictional records for development and demonstrations.
+- CSV uploads should be tested with valid and invalid input files.
 
-Push the completed branch to the repository and open a pull request for
-review according to your team's Git workflow.
+## Future Enhancements
 
-## Scope
+- Automated unit and integration tests.
+- Improved error handling and import summaries.
+- Additional analytics and category-level comparisons.
+- Pagination and advanced policy filtering.
+- Automated data quality checks during ingestion.
+- Deployment using a production-ready WSGI server.
 
-This is a small standalone policy-type catalog. It is not a customer
-policy management, claims, KYC, or payment system.
+## Author
+
+**Dhruv Dumbre**
+
+GitHub: [dhruvdumbre](https://github.com/dhruvdumbre)
+
+Repository: [Policy-Catalog](https://github.com/dhruvdumbre/Policy-Catalog)
+
+---
+
+This project demonstrates practical skills in Python development, REST APIs, relational databases, CRUD operations, ETL workflows, data validation, analytics, and data quality management.
