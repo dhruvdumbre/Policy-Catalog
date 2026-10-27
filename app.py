@@ -11,6 +11,9 @@ from database import (
     delete_policy
 )
 
+from analytics import get_analytics
+from etl import preview_csv, import_valid_rows
+from data_quality import run_quality_audit, issues_to_csv
 
 app = Flask(__name__)
 
@@ -167,7 +170,109 @@ def remove_policy(policy_id):
 
 @app.route("/")
 def home():
+    return render_template("dashboard.html")
+
+@app.route("/policies")
+def policies_page():
     return render_template("index.html")
+
+@app.route("/api/analytics", methods=["GET"])
+def analytics_data():
+    try:
+        return jsonify(get_analytics())
+    except Exception:
+        app.logger.exception("Failed to calculate analytics")
+        return jsonify({
+            "error": "Unable to calculate analytics."
+        }), 500
+        
+@app.route("/analytics")
+def analytics_page():
+    return render_template("analytics.html")
+
+@app.route("/import")
+def import_page():
+    return render_template("import.html")
+
+
+@app.route("/api/import/preview", methods=["POST"])
+def preview_import():
+    if "file" not in request.files:
+        return jsonify({"error": "Please select a CSV file."}), 400
+
+    uploaded_file = request.files["file"]
+
+    if not uploaded_file.filename:
+        return jsonify({"error": "No file selected."}), 400
+
+    if not uploaded_file.filename.lower().endswith(".csv"):
+        return jsonify({"error": "Only CSV files are allowed."}), 400
+
+    try:
+        result = preview_csv(uploaded_file.read())
+        return jsonify(result)
+
+    except ValueError as error:
+        return jsonify({"error": str(error)}), 400
+
+    except Exception:
+        app.logger.exception("CSV preview failed")
+        return jsonify({"error": "Unable to process this CSV file."}), 500
+
+
+@app.route("/api/import/commit", methods=["POST"])
+def commit_import():
+    payload = request.get_json(silent=True) or {}
+
+    try:
+        result = import_valid_rows(payload.get("rows"))
+        return jsonify(result)
+
+    except ValueError as error:
+        return jsonify({"error": str(error)}), 400
+
+    except Exception:
+        app.logger.exception("CSV import failed")
+        return jsonify({"error": "Unable to import CSV records."}), 500
+
+
+@app.route("/quality")
+def quality_page():
+    return render_template("quality.html")
+
+
+@app.route("/api/quality", methods=["GET"])
+def quality_data():
+    try:
+        return jsonify(run_quality_audit())
+    except Exception:
+        app.logger.exception("Data quality audit failed")
+        return jsonify({
+            "error": "Unable to run the data quality audit."
+        }), 500
+
+
+@app.route("/api/quality/report.csv", methods=["GET"])
+def download_quality_report():
+    try:
+        report = run_quality_audit()
+        csv_content = issues_to_csv(report)
+
+        from flask import Response
+
+        return Response(
+            csv_content,
+            mimetype="text/csv",
+            headers={
+                "Content-Disposition":
+                    "attachment; filename=data_quality_report.csv"
+            }
+        )
+    except Exception:
+        app.logger.exception("Quality report export failed")
+        return jsonify({
+            "error": "Unable to generate the quality report."
+        }), 500
 
 if __name__ == "__main__":
     initialize_database()

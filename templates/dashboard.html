@@ -1,0 +1,93 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | PolicyCatalog</title>
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"
+            defer></script>
+</head>
+<body>
+    <aside class="sidebar">
+        <a class="brand" href="/" aria-label="PolicyCatalog home">
+            Policy<span>Catalog</span>
+        </a>
+
+        <p class="sidebar-label">WORKSPACE</p>
+
+        <a class="nav-link active" href="/">▦ &nbsp; Dashboard</a>
+        <a class="nav-link" href="/policies">▤ &nbsp; All Policies</a>
+        <a class="nav-link" href="/analytics">▥ &nbsp; Analytics</a>
+        <a class="nav-link " href="/import">⇧ &nbsp; CSV Import</a>
+        <a class="nav-link" href="/quality">✓ &nbsp; Data Quality</a>
+        <div class="sidebar-footer">
+            Insurance Management<br>
+            Policy Administration
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="topbar">
+            <div>
+                <p class="eyebrow">INSURANCE MANAGEMENT</p>
+                <h1>Policy Dashboard</h1>
+                <p class="subtitle">Manage your insurance policy catalog.</p>
+            </div>
+        </header>
+
+        <section class="stats-grid">
+            <article class="stat-card">
+                <p>Total Policies</p>
+                <h2 id="totalPolicies">—</h2>
+                <span>Policies in catalog</span>
+            </article>
+
+            <article class="stat-card">
+                <p>Categories</p>
+                <h2 id="totalCategories">—</h2>
+                <span>Available insurance types</span>
+            </article>
+
+            <article class="stat-card">
+                <p>Total Coverage</p>
+                <h2 id="totalCoverage">—</h2>
+                <span>Combined listed coverage</span>
+            </article>
+        </section>
+
+        <section class="panel quick-actions">
+            <h2>Quick Actions</h2>
+            <p class="subtitle">
+                Manage your policy catalog using the options below.
+            </p>
+
+            <div class="action-grid">
+                <a class="action-card add-action"
+                   href="/policies?create=1">
+                    <span class="action-icon">＋</span>
+                    <strong>Add Policy</strong>
+                    <span>Create a new insurance policy</span>
+                </a>
+
+                <a class="action-card delete-action"
+                   href="/policies?delete=1">
+                    <span class="action-icon">−</span>
+                    <strong>Delete a Policy</strong>
+                    <span>Choose a policy to remove</span>
+                </a>
+
+                <a class="action-card view-action" href="/policies">
+                    <span class="action-icon">▤</span>
+                    <strong>View Policies</strong>
+                    <span>Browse, search, and edit policies</span>
+                </a>
+            </div>
+        </section>
+
+        <footer>Policy Catalog · Python, Flask &amp; SQLite</footer>
+    </main>
+</body>
+</html>

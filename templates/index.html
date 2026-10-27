@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Policy Catalog | Insurance Management</title>
+    <title>All Policies | PolicyCatalog</title>
     <link rel="stylesheet"
           href="{{ url_for('static', filename='css/style.css') }}">
     <script src="{{ url_for('static', filename='js/script.js') }}"
@@ -12,40 +12,24 @@
 </head>
 <body>
     <aside class="sidebar">
-        <div class="brand">Policy<span>Catalog</span></div>
+        <a class="brand" href="/">Policy<span>Catalog</span></a>
         <p class="sidebar-label">WORKSPACE</p>
-        <a class="nav-link active" href="/">▦ &nbsp; Dashboard</a>
-        <a class="nav-link" href="#policies">▤ &nbsp; All Policies</a>
+        <a class="nav-link" href="/">▦ &nbsp; Dashboard</a>
+        <a class="nav-link active" href="/policies">▤ &nbsp; All Policies</a>
+        <a class="nav-link" href="/analytics">▥ &nbsp; Analytics</a>
+        <a class="nav-link " href="/import">⇧ &nbsp; CSV Import</a>
+        <a class="nav-link" href="/quality">✓ &nbsp; Data Quality</a>
         <div class="sidebar-footer">Insurance Management<br>Policy Administration</div>
     </aside>
 
     <main class="main-content">
         <header class="topbar">
             <div>
+                <h1>All Policies</h1>
                 <p class="eyebrow">INSURANCE MANAGEMENT</p>
-                <h1>Policy Dashboard</h1>
-                <p class="subtitle">Manage your insurance policy catalog.</p>
+                <p class="subtitle">Search, filter, edit, and manage your insurance policies.</p>
             </div>
-            <button id="addPolicyBtn" class="primary-btn">+ Add Policy</button>
         </header>
-
-        <section class="stats-grid">
-            <article class="stat-card">
-                <p>Total Policies</p>
-                <h2 id="totalPolicies">—</h2>
-                <span>Policies in catalog</span>
-            </article>
-            <article class="stat-card">
-                <p>Categories</p>
-                <h2 id="totalCategories">—</h2>
-                <span>Available insurance types</span>
-            </article>
-            <article class="stat-card">
-                <p>Total Coverage</p>
-                <h2 id="totalCoverage">—</h2>
-                <span>Combined listed coverage</span>
-            </article>
-        </section>
 
         <section id="policies" class="panel">
             <div class="panel-heading">

@@ -1,0 +1,107 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSV Import | PolicyCatalog</title>
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="{{ url_for('static', filename='js/import.js') }}"
+            defer></script>
+</head>
+<body>
+    <aside class="sidebar">
+        <a class="brand" href="/">Policy<span>Catalog</span></a>
+        <p class="sidebar-label">WORKSPACE</p>
+        <a class="nav-link" href="/">▦ &nbsp; Dashboard</a>
+        <a class="nav-link" href="/policies">▤ &nbsp; All Policies</a>
+        <a class="nav-link" href="/analytics">▥ &nbsp; Analytics</a>
+        <a class="nav-link active" href="/import">⇧ &nbsp; CSV Import</a>
+        <a class="nav-link" href="/quality">✓ &nbsp; Data Quality</a>
+        <div class="sidebar-footer">
+            Insurance Management<br>
+            Policy Administration
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="topbar">
+            <div>
+                <p class="eyebrow">DATA ENGINEERING</p>
+                <h1>CSV Import & ETL</h1>
+                <p class="subtitle">
+                    Upload, inspect, validate, and import insurance policies.
+                </p>
+            </div>
+        </header>
+
+        <section class="panel">
+            <h2>Upload policy data</h2>
+            <p>Choose a CSV file containing insurance policy records.</p>
+
+            <form id="importForm">
+                <label for="csvFile">CSV file</label>
+                <input id="csvFile" name="file" type="file"
+                       accept=".csv,text/csv" required>
+
+                <p class="subtitle">
+                    Required columns: name, category, min_premium,
+                    max_premium, coverage_amount.
+                </p>
+
+                <button type="submit" id="previewButton">
+                    Preview and Validate
+                </button>
+            </form>
+
+            <p id="importStatus" role="status" aria-live="polite"></p>
+        </section>
+
+        <section class="panel">
+            <h2>Import summary</h2>
+            <div class="stats-grid">
+                <article class="stat-card">
+                    <p>Total rows</p>
+                    <h2 id="totalRows">0</h2>
+                </article>
+                <article class="stat-card">
+                    <p>Valid rows</p>
+                    <h2 id="validRows">0</h2>
+                </article>
+                <article class="stat-card">
+                    <p>Rejected rows</p>
+                    <h2 id="rejectedRows">0</h2>
+                </article>
+            </div>
+        </section>
+
+        <section class="panel">
+            <h2>Preview results</h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Row</th>
+                            <th>Policy name</th>
+                            <th>Category</th>
+                            <th>Minimum premium</th>
+                            <th>Maximum premium</th>
+                            <th>Coverage</th>
+                            <th>Status / errors</th>
+                        </tr>
+                    </thead>
+                    <tbody id="previewBody">
+                        <tr>
+                            <td colspan="7">No file preview yet.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <button id="importButton" type="button" disabled>
+                Import Valid Rows
+            </button>
+        </section>
+    </main>
+</body>
+</html>

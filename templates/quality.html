@@ -1,0 +1,128 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Quality | PolicyCatalog</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+    <script src="{{ url_for('static', filename='js/quality.js') }}"
+            defer></script>
+</head>
+<body>
+    <aside class="sidebar">
+        <a class="brand" href="/">Policy<span>Catalog</span></a>
+        <p class="sidebar-label">WORKSPACE</p>
+
+        <a class="nav-link" href="/">▦ &nbsp; Dashboard</a>
+        <a class="nav-link" href="/policies">▤ &nbsp; All Policies</a>
+        <a class="nav-link" href="/analytics">▥ &nbsp; Analytics</a>
+        <a class="nav-link" href="/import">⇧ &nbsp; CSV Import</a>
+        <a class="nav-link active" href="/quality">✓ &nbsp; Data Quality</a>
+
+        <div class="sidebar-footer">
+            Insurance Management<br>
+            Policy Administration
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="topbar">
+            <div>
+                <p class="eyebrow">DATA GOVERNANCE</p>
+                <h1>Data Quality Engine</h1>
+                <p class="subtitle">
+                    Audit database records and investigate data issues.
+                </p>
+            </div>
+
+            <button id="runAudit" class="secondary-btn">
+                Run Audit
+            </button>
+        </header>
+
+        <p id="qualityStatus" role="status" aria-live="polite">
+            Running data quality audit...
+        </p>
+
+        <section class="stats-grid quality-stats">
+            <article class="stat-card">
+                <p>Total Records</p>
+                <h2 id="totalRecords">—</h2>
+            </article>
+
+            <article class="stat-card">
+                <p>Clean Records</p>
+                <h2 id="cleanRecords">—</h2>
+            </article>
+
+            <article class="stat-card">
+                <p>Affected Records</p>
+                <h2 id="affectedRecords">—</h2>
+            </article>
+
+            <article class="stat-card">
+                <p>Detected Issues</p>
+                <h2 id="issueCount">—</h2>
+            </article>
+
+            <article class="stat-card">
+                <p>Quality Score</p>
+                <h2 id="qualityScore">—</h2>
+            </article>
+        </section>
+
+        <section class="panel">
+            <div class="quality-heading">
+                <div>
+                    <h2>Detected Issues</h2>
+                    <p class="subtitle">
+                        Review each affected record and its validation failure.
+                    </p>
+                </div>
+
+                <a class="secondary-btn"
+                   href="/api/quality/report.csv">
+                    Download CSV Report
+                </a>
+            </div>
+
+            <div class="quality-filters">
+                <label for="severityFilter">Severity</label>
+                <select id="severityFilter">
+                    <option value="all">All severities</option>
+                    <option value="High">High</option>
+                    <option value="Medium">Medium</option>
+                </select>
+
+                <label for="issueSearch">Search issues</label>
+                <input id="issueSearch"
+                       type="search"
+                       placeholder="Policy name, field, or issue">
+            </div>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Policy ID</th>
+                            <th>Policy Name</th>
+                            <th>Field</th>
+                            <th>Issue</th>
+                            <th>Severity</th>
+                        </tr>
+                    </thead>
+                    <tbody id="qualityTableBody">
+                        <tr>
+                            <td colspan="5">Loading audit results...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

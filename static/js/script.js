@@ -40,11 +40,14 @@ async function apiRequest(url, options = {}) {
     return result;
 }
 
+
 async function loadPolicies() {
     showStatus("Loading policies...");
 
     try {
-        const category = document.getElementById("categoryFilter").value;
+        const categoryFilter = document.getElementById("categoryFilter");
+        const category = categoryFilter ? categoryFilter.value : "";
+
         const url = category
             ? `${API}?category=${encodeURIComponent(category)}`
             : API;
@@ -54,18 +57,31 @@ async function loadPolicies() {
         updateStats();
         showStatus(`${policies.length} policy record(s) loaded.`);
     } catch (error) {
-        showStatus(error.message);
+    console.error("Failed to load policies:", error);
+    showStatus(error.message || "Unable to load policies.");
+
+    if (tableBody) {
         tableBody.replaceChildren();
     }
 }
+}
 
 function renderPolicies() {
-    const query = document.getElementById("searchInput").value
-        .trim().toLowerCase();
+    const searchInput = document.getElementById("searchInput");
+    const query = searchInput
+        ? searchInput.value.trim().toLowerCase()
+        : "";
+
+    if (!tableBody) {
+        console.error(
+            'Missing table body. Expected an element with id="policyTableBody".'
+        );
+        return;
+    }
 
     const filtered = policies.filter(policy =>
         String(policy.policy_type_id).includes(query) ||
-        policy.name.toLowerCase().includes(query)
+        String(policy.name || "").toLowerCase().includes(query)
     );
 
     tableBody.replaceChildren();
@@ -125,17 +141,34 @@ function renderPolicies() {
     });
 }
 
+
 function updateStats() {
-    const allCategories = new Set(policies.map(policy => policy.category));
-    const coverage = policies.reduce(
-        (total, policy) => total + Number(policy.coverage_amount), 0
+    const totalPoliciesEl = document.getElementById("totalPolicies");
+    const totalCategoriesEl = document.getElementById("totalCategories");
+    const totalCoverageEl = document.getElementById("totalCoverage");
+
+    const allCategories = new Set(
+        policies.map(policy => policy.category)
     );
 
-    document.getElementById("totalPolicies").textContent = policies.length;
-    document.getElementById("totalCategories").textContent =
-        allCategories.size;
-    document.getElementById("totalCoverage").textContent = money(coverage);
+    const coverage = policies.reduce(
+        (total, policy) => total + Number(policy.coverage_amount || 0),
+        0
+    );
+
+    if (totalPoliciesEl) {
+        totalPoliciesEl.textContent = policies.length;
+    }
+
+    if (totalCategoriesEl) {
+        totalCategoriesEl.textContent = allCategories.size;
+    }
+
+    if (totalCoverageEl) {
+        totalCoverageEl.textContent = money(coverage);
+    }
 }
+
 
 function openCreate() {
     form.reset();
@@ -234,11 +267,56 @@ async function removePolicy(policy) {
     }
 }
 
-document.getElementById("addPolicyBtn").addEventListener("click", openCreate);
-document.getElementById("searchInput").addEventListener("input", renderPolicies);
-document.getElementById("categoryFilter").addEventListener("change", loadPolicies);
-document.getElementById("refreshBtn").addEventListener("click", loadPolicies);
-document.getElementById("closeDialogBtn").addEventListener("click", () => dialog.close());
-document.getElementById("cancelBtn").addEventListener("click", () => dialog.close());
 
-loadPolicies();
+const addPolicyBtn = document.getElementById("addPolicyBtn");
+const searchInput = document.getElementById("searchInput");
+const categoryFilter = document.getElementById("categoryFilter");
+const refreshBtn = document.getElementById("refreshBtn");
+const closeDialogBtn = document.getElementById("closeDialogBtn");
+const cancelBtn = document.getElementById("cancelBtn");
+
+if (addPolicyBtn) {
+    addPolicyBtn.addEventListener("click", openCreate);
+}
+
+if (searchInput) {
+    searchInput.addEventListener("input", renderPolicies);
+}
+
+if (categoryFilter) {
+    categoryFilter.addEventListener("change", loadPolicies);
+}
+
+if (refreshBtn) {
+    refreshBtn.addEventListener("click", loadPolicies);
+}
+
+if (closeDialogBtn) {
+    closeDialogBtn.addEventListener("click", () => dialog.close());
+}
+
+if (cancelBtn) {
+    cancelBtn.addEventListener("click", () => dialog.close());
+}
+
+
+
+async function initializePoliciesPage() {
+    await loadPolicies();
+
+    const params = new URLSearchParams(window.location.search);
+
+    if (params.get("create") === "1") {
+        openCreate();
+    }
+
+    if (params.get("delete") === "1") {
+        showStatus("Select the policy you want to delete.");
+        document.getElementById("policies")?.scrollIntoView({
+            behavior: "smooth"
+        });
+    }
+}
+
+initializePoliciesPage();
+
